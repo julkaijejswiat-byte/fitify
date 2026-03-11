@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>FitKuchnia</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="style.css"/>
+</head>
+<body>
+
+<!-- API KEY BANNER -->
+<div id="keyBanner">
+  <div class="keyInner">
+    <span>🔑</span>
+    <span>Klucz Anthropic API:</span>
+    <input id="apiKeyInput" type="password" placeholder="sk-ant-api03-..."/>
+    <button onclick="saveKey()">Zapisz</button>
+    <span id="keyStatus"></span>
+    <a href="https://console.anthropic.com/" target="_blank">Zdobądź klucz →</a>
+  </div>
+</div>
+
+<header>
+  <div class="hi">
+    <div class="logo">Fit<span>Kuchnia</span></div>
+    <div class="sw">
+      <span>🔍</span>
+      <input id="si" type="text" placeholder='Wpisz np. "zdrowe naleśniki", "fit obiad z łososiem"...'/>
+    </div>
+    <button class="btn-ai" onclick="doSearch()"><span class="aib">AI</span>Szukaj w necie</button>
+    <button class="btn-prem" id="premBtn" onclick="openPrem()">⭐ Premium</button>
+  </div>
+</header>
+
+<div class="hero">
+  <h1>Zdrowe <span>Smaki</span></h1>
+  <p>AI przeszukuje internet na żywo • Prawdziwe przepisy • Pełne wartości odżywcze</p>
+  <div class="stats">
+    <div><div class="sv">🌐</div><div class="sl">AI szuka w sieci</div></div>
+    <div><div class="sv">4200+</div><div class="sl">Przepisów</div></div>
+    <div><div class="sv">6</div><div class="sl">Kategorii</div></div>
+    <div><div class="sv">100%</div><div class="sl">Fit</div></div>
+  </div>
+</div>
+
+<div class="catbar"><div class="catinner" id="catbar"></div></div>
+<div class="fbar"><div class="finner" id="fbar"></div></div>
+
+<div class="main">
+  <div class="aip" id="aip">
+    <div class="aip-bar"></div>
+    <div class="aip-head">
+      <div class="aiico">🌐</div>
+      <div style="flex:1">
+        <div class="aititle" id="aititle">Szukam…</div>
+        <div class="aisub" id="aisub"></div>
+      </div>
+      <button class="xbtn" onclick="closeAip()">✕</button>
+    </div>
+    <div class="aiload" id="aiload">
+      <div class="spin"></div>
+      <div><b>AI przeszukuje internet...</b><br><span style="font-size:12px">Szukam przepisów, oceniam wartości odżywcze</span></div>
+    </div>
+    <div id="aigrid" class="rgrid-sm"></div>
+  </div>
+
+  <div class="ibar" id="ibar">
+    <div style="font-size:26px">🤖</div>
+    <div style="flex:1">
+      <div class="ibar-t">AI szuka przepisów w internecie — w czasie rzeczywistym!</div>
+      <div class="ibar-s">Wpisz co chcesz ugotować i naciśnij Enter. Np: <em>tiramisu fit</em>, <em>obiad z łososiem</em>, <em>deser bez cukru</em></div>
+    </div>
+    <button class="btry" onclick="tryEx()">Spróbuj →</button>
+  </div>
+
+  <div class="sh"><h2 id="stitle">Wszystkie przepisy</h2><span class="sc" id="scnt"></span></div>
+  <div class="rgrid" id="rgrid"></div>
+  <div class="empty" id="empty">
+    <div style="font-size:52px;margin-bottom:12px">🔍</div>
+    <h3>Brak przepisów</h3>
+    <p>Zmień filtry lub użyj AI</p>
+  </div>
+  <div class="pages" id="pages"></div>
+  <div class="ups" id="ups">
+    <div><h3>🔒 Odblokuj 3 800+ przepisów Premium</h3><p>AI bez limitu • Planer tygodniowy • Kalkulator kalorii • Od 9,99 zł/mies</p></div>
+    <button class="bplans" onclick="openPrem()">⭐ Zobacz plany →</button>
+  </div>
+</div>
+
+<!-- RECIPE MODAL -->
+<div class="mover" id="rmov" onclick="if(event.target===this)closeRM()">
+  <div class="mbox">
+    <div class="mhimg">
+      <img id="mimg" src="" alt="" onerror="this.src='https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600'"/>
+      <div class="mgrad"></div>
+      <button class="mcls" onclick="closeRM()">✕</button>
+      <div class="mtw">
+        <div class="mtitle" id="mtitle"></div>
+        <div class="mmeta" id="mmeta"></div>
+      </div>
+    </div>
+    <div class="mbody">
+      <div class="mfull" id="mfull"></div>
+      <p class="mdesc" id="mdesc"></p>
+      <div class="mcols">
+        <div><div class="mct">🛒 Składniki</div><div id="ming"></div></div>
+        <div><div class="mct">👨‍🍳 Przygotowanie</div><div id="mstp"></div></div>
+      </div>
+      <div id="msrc"></div>
+      <div class="tags" id="mtags"></div>
+    </div>
+  </div>
+</div>
+
+<!-- PREMIUM MODAL -->
+<div class="pover" id="pmov" onclick="if(event.target===this)closePM()">
+  <div class="pbox">
+    <div class="phdr">
+      <button class="pcls" onclick="closePM()">✕</button>
+      <div style="font-size:34px;margin-bottom:7px">🌿</div>
+      <h2>Odblokuj FitKuchnia Premium</h2>
+      <p>4 200+ przepisów • AI bez limitu • Planer posiłków • Kalkulator kalorii</p>
+    </div>
+    <div class="pbody">
+      <div class="pgrid" id="pgrid"></div>
+      <button class="bbuy" id="bbuy" onclick="buy()"></button>
+      <div style="text-align:center;font-size:11px;color:#ccc;margin-top:10px">🔒 Bezpieczna płatność • Anuluj w każdej chwili • 7-dniowy zwrot</div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<script src="script.js"></script>
+</body>
+</html>
